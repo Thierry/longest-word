@@ -2,8 +2,17 @@
 
 import string
 from random import choice
+import requests
+# API https://wagon-dictionary.herokuapp.com/:word
 
 class Game():
+    def is_in_dictionary(self, word):
+        try:
+            resp = requests.get(f"https://wagon-dictionary.herokuapp.com/{word}")
+        except:
+            print(f"An error occured contacting LeWagon dictionnary API ({resp.status}")
+            sys.exit(1)
+        return resp.json()["found"]
 
     def __init__(self):
         self.grid = [choice(string.ascii_uppercase) for x in range(9)]
@@ -18,4 +27,4 @@ class Game():
                 letters.remove(letter)
             else:
                 return False
-        return True
+        return self.is_in_dictionary(word)
